@@ -24,7 +24,7 @@ test_alarm_priority (void)
   wake_time = timer_ticks () + 5 * TIMER_FREQ;
   sema_init (&wait_sema, 0);
   
-  for (i = 0; i < 10; i++) 
+  for (i = 0; i < 10; i++) // create threads. 
     {
       int priority = PRI_DEFAULT - (i + 5) % 10 - 1;
       char name[16];
@@ -32,10 +32,10 @@ test_alarm_priority (void)
       thread_create (name, priority, alarm_priority_thread, NULL);
     }
 
-  thread_set_priority (PRI_MIN);
+  thread_set_priority (PRI_MIN); // still running on cuurent thread, although priority is changed. 
 
   for (i = 0; i < 10; i++)
-    sema_down (&wait_sema);
+    sema_down (&wait_sema); // in sema_down(), current thread is blocked, then use schedule() to go to a thread (highest priority) that has just created. 
 }
 
 static void
@@ -54,5 +54,5 @@ alarm_priority_thread (void *aux UNUSED)
   /* Print a message on wake-up. */
   msg ("Thread %s woke up.", thread_name ());
 
-  sema_up (&wait_sema);
+  sema_up (&wait_sema); // Go back to main thread afterwards. 
 }
