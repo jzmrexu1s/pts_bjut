@@ -96,7 +96,7 @@ timer_sleep (int64_t ticks)
 
   ASSERT (intr_get_level () == INTR_ON);
   while (timer_elapsed (start) < ticks) // do thread_yield() for ticks time.
-    thread_yield ();*/
+    thread_yield ();*/ // 
 
   //lzh 11.12
   if(ticks<=0)
