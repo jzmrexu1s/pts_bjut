@@ -54,5 +54,5 @@ alarm_priority_thread (void *aux UNUSED)
   /* Print a message on wake-up. */
   msg ("Thread %s woke up.", thread_name ());
 
-  sema_up (&wait_sema); // Go back to main thread afterwards. 
+  sema_up (&wait_sema); // Go back to main
 }
