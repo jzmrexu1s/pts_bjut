@@ -308,19 +308,19 @@ thread_exit (void)
 void
 thread_yield (void) 
 {
-  struct thread *cur = thread_current ();
+  struct thread *cur = thread_current ();  // zcw: get the start pointer of current thread.
   enum intr_level old_level;
   
   ASSERT (!intr_context ());
 
   old_level = intr_disable ();
-  if (cur != idle_thread) 
+  if (cur != idle_thread) // zcw: if current thread is not idle
   {
-    list_push_back (&ready_list, &cur->elem);
+    list_push_back (&ready_list, &cur->elem); // zcw: add current thread to ready list
     list_sort(&ready_list, (list_less_func *) &thread_cmp, NULL);         //lzh suibianxiede
   }
   cur->status = THREAD_READY;
-  schedule ();
+  schedule (); // zcw: run next thread
   intr_set_level (old_level);
 }
 
@@ -541,7 +541,8 @@ next_thread_to_run (void)
 void
 thread_schedule_tail (struct thread *prev)
 {
-  struct thread *cur = running_thread ();
+  // Annotated by zcw
+  struct thread *cur = running_thread (); // Get current thread
   
   ASSERT (intr_get_level () == INTR_OFF);
 
