@@ -69,10 +69,12 @@ timer_calibrate (void)
 /* Returns the number of timer ticks since the OS booted. */
 int64_t
 timer_ticks (void) 
-{
-  enum intr_level old_level = intr_disable ();
-  int64_t t = ticks;
-  intr_set_level (old_level);
+{ // annotation written by zcw
+  // using intr_disable() and intr_set_level() to prevent from intr when getting the value of ticks. 
+  // Keep t = ticks between these two functions. 
+  enum intr_level old_level = intr_disable (); // Save the intterupt status, then disable intterupt. 
+  int64_t t = ticks; // ticks represents current time.
+  intr_set_level (old_level); // Back to the previous intr status (same as old_level).
   return t;
 }
 
@@ -81,7 +83,8 @@ timer_ticks (void)
 int64_t
 timer_elapsed (int64_t then) 
 {
-  return timer_ticks () - then;
+  // annotation written by zcw
+  return timer_ticks () - then; // get the time interval between current time and then. 
 }
 
 /* Sleeps for approximately TICKS timer ticks.  Interrupts must
@@ -92,7 +95,7 @@ timer_sleep (int64_t ticks)
   /*int64_t start = timer_ticks ();
 
   ASSERT (intr_get_level () == INTR_ON);
-  while (timer_elapsed (start) < ticks) 
+  while (timer_elapsed (start) < ticks) // do thread_yield() for ticks time.
     thread_yield ();*/
 
   //lzh 11.12
