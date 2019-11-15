@@ -238,7 +238,7 @@ thread_unblock (struct thread *t)
   old_level = intr_disable ();
   ASSERT (t->status == THREAD_BLOCKED);
   list_push_back (&ready_list, &t->elem);
-  list_sort(&ready_list, (list_less_func *) &thread_cmp, NULL);         //lzh suibianxiede
+  list_sort(&ready_list, thread_cmp, NULL);         //lzh suibianxiede
   t->status = THREAD_READY;
   intr_set_level (old_level);
 }
@@ -317,7 +317,7 @@ thread_yield (void)
   if (cur != idle_thread) // zcw: if current thread is not idle
   {
     list_push_back (&ready_list, &cur->elem); // zcw: add current thread to ready list
-    list_sort(&ready_list, (list_less_func *) &thread_cmp, NULL);         //lzh suibianxiede
+    list_sort(&ready_list, thread_cmp, NULL);         //lzh suibianxiede
   }
   cur->status = THREAD_READY;
   schedule (); // zcw: run next thread
@@ -344,10 +344,10 @@ thread_foreach (thread_action_func *func, void *aux)
 //lzh:11.12
 void check_blocked_thread(struct thread *t, void *aux)
 {
-  if(t->status==THREAD_BLOCKED && t->sleep_ticks > 0)
+  if(t -> sleep_ticks > 0)
   {
-    t->sleep_ticks-=1;
-    if(t->sleep_ticks==0)
+    t -> sleep_ticks -= 1;
+    if(t -> sleep_ticks == 0)
     {
       thread_unblock(t);
     }
@@ -491,7 +491,7 @@ init_thread (struct thread *t, const char *name, int priority)
 
   old_level = intr_disable ();
   list_push_back (&all_list, &t->allelem);
-  list_sort(&all_list,(list_less_func *) &thread_cmp, NULL);         //lzh suibianxiede
+  list_sort(&all_list, thread_cmp, NULL);         //lzh suibianxiede
   intr_set_level (old_level);
 }
 
