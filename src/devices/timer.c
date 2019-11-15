@@ -99,10 +99,7 @@ timer_sleep (int64_t ticks)
     thread_yield ();*/ // 
 
   //lzh 11.12
-  if(ticks<=0)
-  {
-    return;
-  }
+  if (ticks <= 0) return;
   ASSERT (intr_get_level () == INTR_ON);
   enum intr_level old_level = intr_disable();
   struct thread *current_thread = thread_current();
